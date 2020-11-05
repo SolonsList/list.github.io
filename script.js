@@ -1,20 +1,10 @@
 //v 4.0 save / get array via cookies
+
 //v 4.0 read cookie on load and display
-
-//v3.4
-
 window.onload = function() {
- alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
- populateshoppinglistonload();
-  displayShoppinglists();
-    clearFocus();
+  populateshoppinglistonload();
+   displayShoppinglists();
 };
-
-function about()
-{
-     alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
-
-}
 
 //read cookie and return
 function readCookie(name) {
@@ -148,12 +138,30 @@ function addtoshopcart(item, num) {
 }
 
 //v 3.1 Update function addShoppinglist by adding objects
-function addShoppinglist(item) {
+function addShoppinglist(item,cost) {
   //v 3.0 declare variable for groc string
+  var groc="";
+  //v 3.0 v 3.0 declare variable for loop count
+  var count=0;
+  //v 3.0 edit value for MyItems.name
+  MyItems.name=item;
+  //v 3.0 edit value for MyItems.cost
+  MyItems.price=cost;
+  //v 3.0 for loop through object propterties and 
+  for (var x in MyItems){
+    if (count===1){
+      groc += "$";
+    }
+    //add to groc string from object array item
+    groc += MyItems[x];
+    if (count===0){
+      groc += " | ";
+    }
+    //increment count by 1
+   count++;
+  }
   //push to shoppinglist
-  if (item != "")
-  {
-  shoppinglist.push(item);
+  shoppinglist.push(groc);
   //display shoppinglist
   displayShoppinglists();
 //v3.1 display displayShoppingCart() 
@@ -161,35 +169,29 @@ function addShoppinglist(item) {
   clearFocus();
   //v 4.0 save cookie
   savecookie();
-  }else
-  {
-  alert("Item Description Required: Please enter now :)");
-  clearFocus();
-  }
 }
 
 function clearFocus()
 {
   document.getElementById("item").value = "";
- //  document.getElementById("cost").value = "";
+   document.getElementById("cost").value = "";
   document.getElementById("item").focus();
 }
 
 
 //v 3.1: update function displayShoppinglists() to add to cart 
 function displayShoppinglists() {
-document.getElementById("MyList").innerHTML = '';
 var TheList = "";
 var TheRow = "";
 var arrayLength = shoppinglist.length;
 for (var i = 0; i < shoppinglist.length; i++) {
   //v 3.1 change button name to btndelete
-var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove" onclick="deleteShoppinglists(' + i + ')" />';
+var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove Item" onclick="deleteShoppinglists(' + i + ')" />';
 var btnupdate =  ' <input class="button" name="edit" type="button" value="Edit Item" onclick="changeShoppinglist(' + i + ')" />';
 //v 3.1 add edit button using below i index & name it btnpdate
 var arrays = shoppinglist[i];
 arrays = "'"+arrays+"'";
-var btnaddcart =  '<input name="add" type="checkbox" id="adds" value="Add to Shopping Cart" onclick="addtoshopcart('+arrays+','+ i +')" />';
+var btnaddcart =  '<label><input name="add" type="checkbox" id="adds" value="Add to Shopping Cart" onclick="addtoshopcart('+arrays+','+ i +')" />Add</label>';
 TheRow = '<li>' + shoppinglist[i] + btndelete + ' '  + btnaddcart + '</li>';
 TheList += TheRow;
 }
@@ -199,34 +201,31 @@ if (arrayLength > 0)
   document.getElementById("MyList").innerHTML = '<ul>' + TheList + '</ul>';
 }else
 {
-  document.getElementById("MyList").innerHTML = ' ';
+  document.getElementById("MyList").innerHTML = '';
 }
 }
 
 //v3.1
 function displayShoppingCart() {
-document.getElementById("MyCart").innerHTML = ''
 var TheList = "";
 var TheRow = "";
 var arrayLength = addtocart.length;
 for (var i = 0; i < arrayLength; i++) {
   //v 3.1 change button name to btndelete
-var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove" onclick="deleteShoppingCart(' + i + ')" />';
+var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove Item" onclick="deleteShoppingCart(' + i + ')" />';
 //v 3.1 add edit button using below i index & name it btnpdate
 var btnupdate =  ' <input class="button" name="edit" type="button" value="Edit Item" onclick="changeShoppingCart(' + i + ')" />';
 var arrays = addtocart[i];
 arrays = "'"+arrays+"'";
 //v 3.1 add edit button using below i index & name it btnpdate
-var btnaddlist =  '<input name="add" type="checkbox" id="adds" value="Add to Shopping List" onclick="addbacktoshoppinglist('+arrays+',' + i + ')" checked="checked"/>';
-TheRow =  "<li>" + addtocart[i] + btndelete + ' ' +  ' ' + btnaddlist + '</li>';
+var btnaddlist =  '<label><input name="add" type="checkbox" id="adds" value="Add to Shopping List" onclick="addbacktoshoppinglist('+arrays+',' + i + ')" checked="checked"/>Add</label>';
+TheRow =  "<li>" + addtocart[i] + btndelete + ' ' +  ' ' + btnaddlist + '<br></li>';
 TheList += TheRow;
 }
 if (arrayLength > 0)
 {
-  document.getElementById("labels").innerHTML = 'Purchased';
-  document.getElementById("MyCart").innerHTML = '<ul>' + TheList + '</ul>';
+  document.getElementById("MyCart").innerHTML = 'Shopping Cart ' + '<br><ul>' + TheList + '</ul>';
 }else{
-  document.getElementById("labels").innerHTML = '';
   document.getElementById("MyCart").innerHTML = '';
 }
 }
@@ -246,5 +245,9 @@ function deleteShoppingCart(position) {
   displayShoppingCart();
 }
 
+var loadFile = function(event) {
+	var image = document.getElementById('output');
+	image.src = URL.createObjectURL(event.target.files[0]);
+};
 
 
